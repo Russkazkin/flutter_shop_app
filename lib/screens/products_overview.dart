@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../data/products.dart';
 import '../models/product.dart';
+import '../widget/product_item.dart';
 
 class ProductsOverview extends StatelessWidget {
   @override
@@ -17,7 +18,11 @@ class ProductsOverview extends StatelessWidget {
           crossAxisSpacing: 10,
           mainAxisSpacing: 10,
         ),
-        itemBuilder: (context, index) => Container(),
+        itemBuilder: (context, index) => ProductItem(
+          id: dummyProduct[index].id,
+          title: dummyProduct[index].title,
+          imageUrl: dummyProduct[index].imageUrl,
+        ),
         padding: const EdgeInsets.all(10),
         itemCount: dummyProduct.length,
       ),
