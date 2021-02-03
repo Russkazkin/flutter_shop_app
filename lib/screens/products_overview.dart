@@ -21,6 +21,7 @@ class ProductsOverview extends StatelessWidget {
         itemBuilder: (context, index) => ProductItem(
           id: dummyProduct[index].id,
           title: dummyProduct[index].title,
+          price: dummyProduct[index].price,
           imageUrl: dummyProduct[index].imageUrl,
         ),
         padding: const EdgeInsets.all(10),

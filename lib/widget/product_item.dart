@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 class ProductItem extends StatelessWidget {
   final String id;
   final String title;
+  final double price;
   final String imageUrl;
 
-  const ProductItem({this.id, this.title, this.imageUrl});
+  const ProductItem({this.id, this.title, this.price, this.imageUrl});
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +17,14 @@ class ProductItem extends StatelessWidget {
           imageUrl,
           fit: BoxFit.cover,
         ),
+        header: GridTileBar(
+          title: Text(
+            title,
+            style: TextStyle(fontSize: 12),
+            textAlign: TextAlign.center,
+          ),
+          backgroundColor: Colors.black38,
+        ),
         footer: GridTileBar(
           leading: IconButton(
             icon: Icon(Icons.favorite_border),
@@ -24,7 +33,7 @@ class ProductItem extends StatelessWidget {
           ),
           backgroundColor: Colors.black87,
           title: Text(
-            title,
+            '\$$price',
             style: TextStyle(fontSize: 12),
             textAlign: TextAlign.center,
           ),
