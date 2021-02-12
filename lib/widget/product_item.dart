@@ -42,7 +42,7 @@ class ProductItem extends StatelessWidget {
           ),
           backgroundColor: Colors.black87,
           title: Text(
-            '\$$product.price',
+            '\$ ' + product.price.toString(),
             style: TextStyle(fontSize: 12),
             textAlign: TextAlign.center,
           ),
