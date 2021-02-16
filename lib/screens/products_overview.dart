@@ -50,6 +50,7 @@ class _ProductsOverviewState extends State<ProductsOverview> {
             ),
           ),
         ],
+
       ),
       body: ProductsGrid(_showOnlyFavorites),
     );
