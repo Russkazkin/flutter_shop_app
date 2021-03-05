@@ -10,7 +10,8 @@ class CartItem extends StatelessWidget {
   final int quantity;
   final String title;
 
-  const CartItem({Key key, this.id, this.price, this.quantity, this.title, this.productId})
+  const CartItem(
+      {Key key, this.id, this.price, this.quantity, this.title, this.productId})
       : super(key: key);
 
   @override
@@ -20,6 +21,23 @@ class CartItem extends StatelessWidget {
         Provider.of<Cart>(context, listen: false).removeItem(productId);
       },
       direction: DismissDirection.endToStart,
+      confirmDismiss: (direction) => showDialog(
+        context: context,
+        builder: (dialogContext) => AlertDialog(
+          title: Text('Are you sure?'),
+          content: Text('Do you want to remove the item from the cart?'),
+          actions: [
+            FlatButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text('No'),
+            ),
+            FlatButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text('Yes'),
+            ),
+          ],
+        ),
+      ),
       key: key,
       background: Container(
         color: Theme.of(context).errorColor,
