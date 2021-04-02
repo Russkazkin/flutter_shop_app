@@ -41,12 +41,27 @@ class _EditProductScreenState extends State<EditProductScreen> {
   }
 
   void _updateImageUrl() {
+    if (_imageUrlController.text.isEmpty) {
+      return;
+    }
+    if (!_imageUrlController.text.startsWith('http')) {
+      return;
+    }
+    if (!_imageUrlController.text.endsWith('.png') &&
+        !_imageUrlController.text.endsWith('.jpeg') &&
+        !_imageUrlController.text.endsWith('.jpg')) {
+      return;
+    }
     if (!_imageUrlFocusNode.hasFocus) {
       setState(() {});
     }
   }
 
   void _saveForm() {
+    final isValid = _form.currentState.validate();
+    if (!isValid) {
+      return;
+    }
     _form.currentState.save();
     print(_editedProduct.title);
     print(_editedProduct.id);
@@ -87,6 +102,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   imageUrl: _editedProduct.imageUrl,
                   isFavorite: _editedProduct.isFavorite,
                 ),
+                validator: (value) {
+                  return value.isEmpty ? 'Please provide a value' : null;
+                },
               ),
               TextFormField(
                 decoration: InputDecoration(labelText: 'Price'),
@@ -103,6 +121,18 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   imageUrl: _editedProduct.imageUrl,
                   isFavorite: _editedProduct.isFavorite,
                 ),
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Please provide a value';
+                  }
+                  if (double.tryParse(value) == null) {
+                    return 'Please enter a valid number';
+                  }
+                  if (double.parse(value) <= 0) {
+                    return 'Please provide a positive number';
+                  }
+                  return null;
+                },
               ),
               TextFormField(
                 decoration: InputDecoration(labelText: 'Description'),
@@ -117,6 +147,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   imageUrl: _editedProduct.imageUrl,
                   isFavorite: _editedProduct.isFavorite,
                 ),
+                validator: (value) {
+                  return value.isEmpty ? 'Please provide a value' : null;
+                },
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -155,6 +188,20 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         imageUrl: value,
                         isFavorite: _editedProduct.isFavorite,
                       ),
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Please enter an image URL';
+                        }
+                        if (!value.startsWith('http')) {
+                          return 'Please enter a valid URL';
+                        }
+                        if (!value.endsWith('.png') &&
+                            !value.endsWith('.jpeg') &&
+                            !value.endsWith('.jpg')) {
+                          return 'Please enter a valid image URL';
+                        }
+                        return null;
+                      },
                     ),
                   ),
                 ],
