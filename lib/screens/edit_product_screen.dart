@@ -61,7 +61,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
           'id': _editedProduct.id,
           'title': _editedProduct.title,
           'description': _editedProduct.description,
-          'price':  _editedProduct.price.toString(),
+          'price': _editedProduct.price.toString(),
           'imageUrl': '',
           'isFavorite': _editedProduct.isFavorite.toString(),
         };
@@ -95,7 +95,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
       return;
     }
     _form.currentState.save();
-    Provider.of<Products>(context, listen: false).addProduct(_editedProduct);
+    if (_editedProduct.id != null) {
+      Provider.of<Products>(context, listen: false)
+          .updateProduct(_editedProduct.id, _editedProduct);
+    } else {
+      Provider.of<Products>(context, listen: false).addProduct(_editedProduct);
+    }
     Navigator.of(context).pop();
   }
 
