@@ -40,4 +40,9 @@ class Products with ChangeNotifier {
       print('No products to update');
     }
   }
+
+  void deleteProduct(String id) {
+    _items.removeWhere((Product product) => product.id == id);
+    notifyListeners();
+  }
 }
