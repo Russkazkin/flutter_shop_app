@@ -8,7 +8,7 @@ import '../data/products.dart';
 
 class Products with ChangeNotifier {
   List<Product> _items = dummyProduct;
-
+  final url = Uri.parse('https://flutter-shop-1ef5f-default-rtdb.firebaseio.com/products.json');
   List<Product> get items {
     return [..._items];
   }
@@ -21,8 +21,16 @@ class Products with ChangeNotifier {
     return _items.firstWhere((element) => element.id == id);
   }
 
+  Future<void> fetchProducts() async {
+    try {
+      final response = await http.get(url);
+      print(jsonDecode(response.body));
+    } catch(error) {
+      throw error;
+    }
+  }
+
   Future<void> addProduct(Product product) async {
-    final url = Uri.parse('https://flutter-shop-1ef5f-default-rtdb.firebaseio.com/products.json');
     try {
       final response = await http.post(url, body: json.encode({
         'title': product.title,
