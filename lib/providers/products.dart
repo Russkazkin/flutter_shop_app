@@ -29,13 +29,12 @@ class Products with ChangeNotifier {
       final List<Product> loadedProducts = [];
       data.forEach((productId, productData) {
         loadedProducts.add(Product(
-          id: productId,
-          title: productData['title'],
-          imageUrl: productData['imageUrl'],
-          description: productData['description'],
-          price: productData['price'],
-          isFavorite: productData['isFavorite']
-        ));
+            id: productId,
+            title: productData['title'],
+            imageUrl: productData['imageUrl'],
+            description: productData['description'],
+            price: productData['price'],
+            isFavorite: productData['isFavorite']));
       });
       _items = loadedProducts;
       notifyListeners();
@@ -73,13 +72,15 @@ class Products with ChangeNotifier {
   Future<void> updateProduct(String id, Product product) async {
     final productIndex = _items.indexWhere((product) => product.id == id);
     if (productIndex >= 0) {
-      final productUrl = Uri.parse('https://flutter-shop-1ef5f-default-rtdb.firebaseio.com/products/$id.json');
-      await http.patch(productUrl, body: json.encode({
-        'title': product.title,
-        'description': product.description,
-        'imageUrl': product.imageUrl,
-        'price': product.price,
-      }));
+      final productUrl = Uri.parse(
+          'https://flutter-shop-1ef5f-default-rtdb.firebaseio.com/products/$id.json');
+      await http.patch(productUrl,
+          body: json.encode({
+            'title': product.title,
+            'description': product.description,
+            'imageUrl': product.imageUrl,
+            'price': product.price,
+          }));
       _items[productIndex] = product;
       notifyListeners();
     } else {
@@ -88,7 +89,21 @@ class Products with ChangeNotifier {
   }
 
   void deleteProduct(String id) {
-    _items.removeWhere((Product product) => product.id == id);
+    final existingProductIndex =
+        _items.indexWhere((Product product) => product.id == id);
+    var existingProduct = _items[existingProductIndex];
+    final productUrl = Uri.parse(
+        'https://flutter-shop-1ef5f-default-rtdb.firebaseio.com/products/$id');
+    _items.removeAt(existingProductIndex);
     notifyListeners();
+    http.delete(productUrl).then((response) {
+      if (response.statusCode >= 400) {
+        throw Exception('Something went wrong!');
+      }
+      existingProduct = null;
+    }).catchError((_) {
+      _items.insert(existingProductIndex, existingProduct);
+      notifyListeners();
+    });
   }
 }
