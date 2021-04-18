@@ -93,7 +93,7 @@ class Products with ChangeNotifier {
         _items.indexWhere((Product product) => product.id == id);
     var existingProduct = _items[existingProductIndex];
     final productUrl = Uri.parse(
-        'https://flutter-shop-1ef5f-default-rtdb.firebaseio.com/products/$id');
+        'https://flutter-shop-1ef5f-default-rtdb.firebaseio.com/products/$id.json');
     _items.removeAt(existingProductIndex);
     notifyListeners();
     http.delete(productUrl).then((response) {
