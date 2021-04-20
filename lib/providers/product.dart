@@ -27,18 +27,13 @@ class Product with ChangeNotifier{
     final oldStatus = isFavorite;
     isFavorite = !isFavorite;
     notifyListeners();
-    try {
-      final response = await http.patch(productUrl, body: jsonEncode({
-        'isFavorite': isFavorite
-      }));
-      if (response.statusCode >= 400) {
-        isFavorite = oldStatus;
-        notifyListeners();
-        throw HttpException('Could not change favorite status.');
-      }
-    } catch (_) {
+    final response = await http.patch(productUrl, body: jsonEncode({
+      'isFavorite': isFavorite
+    }));
+    if (response.statusCode >= 400) {
       isFavorite = oldStatus;
       notifyListeners();
+      throw HttpException('Could not change favorite status.');
     }
   }
 }
