@@ -17,6 +17,11 @@ class Orders with ChangeNotifier {
     return [...this._orders];
   }
 
+  Future<void> fetchOrders() async {
+    final response = await http.get(url);
+    print(json.decode(response.body));
+  }
+
   Future<void> addOrder(List<CartItem> cartProducts, double total) async {
     final timeStamp = DateTime.now();
     final response = await http.post(url, body: json.encode({
