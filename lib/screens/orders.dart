@@ -17,7 +17,7 @@ class _OrdersState extends State<Orders> {
 
   @override
   void initState() {
-    Future.delayed(Duration.zero).then((_) async {
+    /*Future.delayed(Duration.zero).then((_) async {
       setState(() {
         _isLoading = true;
       });
@@ -26,26 +26,43 @@ class _OrdersState extends State<Orders> {
       setState(() {
         _isLoading = false;
       });
-    });
+    });*/
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final data = Provider.of<OrdersProvider.Orders>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Orders'),
       ),
       drawer: AppDrawer(),
-      body: _isLoading
-          ? Center(
+      body: FutureBuilder(
+        future: Provider.of<OrdersProvider.Orders>(context, listen: false)
+            .fetchOrders(),
+        builder: (context, data) {
+          if (data.connectionState == ConnectionState.waiting) {
+            return Center(
               child: CircularProgressIndicator(),
-            )
-          : ListView.builder(
-              itemCount: data.orders.length,
-              itemBuilder: (context, index) => OrderItem(data.orders[index]),
-            ),
+            );
+          } else {
+            if (data.error != null) {
+              // TODO: Error Handling
+              return Center(
+                child: Text('An error occurred!'),
+              );
+            } else {
+              return Consumer<OrdersProvider.Orders>(
+                builder: (context, data, child) => ListView.builder(
+                  itemCount: data.orders.length,
+                  itemBuilder: (context, index) =>
+                      OrderItem(data.orders[index]),
+                ),
+              );
+            }
+          }
+        },
+      ),
     );
   }
 }
