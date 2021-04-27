@@ -5,31 +5,8 @@ import '../providers/orders.dart' as OrdersProvider;
 import '../widget/order_item.dart';
 import '../widget/app_drawer.dart';
 
-class Orders extends StatefulWidget {
+class Orders extends StatelessWidget {
   static const route = '/orders';
-
-  @override
-  _OrdersState createState() => _OrdersState();
-}
-
-class _OrdersState extends State<Orders> {
-  var _isLoading = false;
-
-  @override
-  void initState() {
-    /*Future.delayed(Duration.zero).then((_) async {
-      setState(() {
-        _isLoading = true;
-      });
-      await Provider.of<OrdersProvider.Orders>(context, listen: false)
-          .fetchOrders();
-      setState(() {
-        _isLoading = false;
-      });
-    });*/
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
