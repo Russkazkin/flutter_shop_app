@@ -10,6 +10,7 @@ import 'screens/cart.dart' as CartScreen;
 import 'screens/orders.dart' as OrdersScreen;
 import 'screens/user_products.dart';
 import 'screens/edit_product_screen.dart';
+import 'screens/auth_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
           accentColor: Colors.deepOrange,
           fontFamily: 'Lato',
         ),
-        home: ProductsOverview(),
+        home: AuthScreen(),
         routes: {
           ProductDetail.route: (context) => ProductDetail(),
           CartScreen.Cart.route: (context) => CartScreen.Cart(),
