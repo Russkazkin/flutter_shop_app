@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 
 import './providers/orders.dart';
 import 'providers/cart.dart';
@@ -12,7 +13,10 @@ import 'screens/user_products.dart';
 import 'screens/edit_product_screen.dart';
 import 'screens/auth_screen.dart';
 
-void main() => runApp(MyApp());
+Future main() async {
+  await DotEnv.load();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
