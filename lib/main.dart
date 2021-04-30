@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 
-import './providers/orders.dart';
+import 'providers/orders.dart';
+import 'providers/auth.dart';
 import 'providers/cart.dart';
 import 'screens/product_detail.dart';
 import 'screens/products_overview.dart';
@@ -23,6 +24,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(
+          create: (context) => Auth(),
+        ),
         ChangeNotifierProvider(
           create: (context) => Products(),
         ),
