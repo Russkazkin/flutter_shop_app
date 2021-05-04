@@ -25,15 +25,14 @@ class Auth with ChangeNotifier {
 
   Future<void> signup(String email, String password) async {
     final url = Uri.parse(
-        'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' +
+        'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' +
             env['FIREBASE_KEY']);
     return _authenticate(email, password, url);
-
   }
 
   Future<void> login(String email, String password) async {
     final url = Uri.parse(
-        'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' +
+        'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' +
             env['FIREBASE_KEY']);
     return _authenticate(email, password, url);
   }
