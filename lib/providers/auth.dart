@@ -11,6 +11,17 @@ class Auth with ChangeNotifier {
   DateTime _expireDate;
   String _userId;
 
+  bool get isAuth {
+    return token != null;
+  }
+
+  String get token {
+    if (_token != null && _expireDate != null && _expireDate.isAfter(DateTime.now())) {
+      return _token;
+    }
+    return null;
+  }
+
   Future<void> _authenticate(String email, String password, Uri url) async {
     try {
       final response = await http.post(
