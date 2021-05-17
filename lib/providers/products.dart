@@ -10,8 +10,9 @@ class Products with ChangeNotifier {
   List<Product> _items = [];
 
   final String authToken;
+  final String userId;
 
-  Products(this.authToken, this._items);
+  Products(this.authToken, this.userId, this._items);
 
   List<Product> get items {
     return [..._items];
@@ -26,7 +27,7 @@ class Products with ChangeNotifier {
   }
 
   Future<void> fetchProducts() async {
-    final url = Uri.parse(
+    var url = Uri.parse(
         'https://flutter-shop-1ef5f-default-rtdb.firebaseio.com/products.json?auth=$authToken');
     try {
       final response = await http.get(url);
@@ -35,14 +36,21 @@ class Products with ChangeNotifier {
       if (data == null) {
         return;
       }
+      url = Uri.parse(
+          'https://flutter-shop-1ef5f-default-rtdb.firebaseio.com/userFavorites/$userId.json?auth=$authToken');
+      final favoritesResponse = await http.get(url);
+      final favoriteData = json.decode(favoritesResponse.body);
       data.forEach((productId, productData) {
-        loadedProducts.add(Product(
+        loadedProducts.add(
+          Product(
             id: productId,
             title: productData['title'],
             imageUrl: productData['imageUrl'],
             description: productData['description'],
             price: productData['price'],
-            isFavorite: productData['isFavorite']));
+            isFavorite: favoriteData == null ? false : favoriteData[productId] ?? false,
+          ),
+        );
       });
       _items = loadedProducts;
       notifyListeners();
@@ -61,7 +69,6 @@ class Products with ChangeNotifier {
             'description': product.description,
             'price': product.price,
             'imageUrl': product.imageUrl,
-            'isFavorite': product.isFavorite,
           }));
       final newProduct = Product(
         id: json.decode(response.body)['name'],
@@ -107,11 +114,11 @@ class Products with ChangeNotifier {
     _items.removeAt(existingProductIndex);
     notifyListeners();
     final response = await http.delete(productUrl);
-      if (response.statusCode >= 400) {
-        _items.insert(existingProductIndex, existingProduct);
-        notifyListeners();
-        throw HttpException('Could not delete product.');
-      }
-      existingProduct = null;
+    if (response.statusCode >= 400) {
+      _items.insert(existingProductIndex, existingProduct);
+      notifyListeners();
+      throw HttpException('Could not delete product.');
+    }
+    existingProduct = null;
   }
 }
