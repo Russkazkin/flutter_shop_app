@@ -26,9 +26,10 @@ class Products with ChangeNotifier {
     return _items.firstWhere((element) => element.id == id);
   }
 
-  Future<void> fetchProducts() async {
+  Future<void> fetchProducts([bool filterByUser = false]) async {
+    final filterString = filterByUser ? 'orderBy="userId"&equalTo="$userId"' : '';
     var url = Uri.parse(
-        'https://flutter-shop-1ef5f-default-rtdb.firebaseio.com/products.json?auth=$authToken');
+        'https://flutter-shop-1ef5f-default-rtdb.firebaseio.com/products.json?auth=$authToken&$filterString');
     try {
       final response = await http.get(url);
       final data = json.decode(response.body) as Map<String, dynamic>;
