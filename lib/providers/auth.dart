@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/http_exception.dart';
 
@@ -56,6 +57,13 @@ class Auth with ChangeNotifier {
       );
       autoLogout();
       notifyListeners();
+      final prefs = await SharedPreferences.getInstance();
+      final userData = json.encode({
+        'token': _token,
+        'userId': _userId,
+        'expireDate': _expireDate.toIso8601String(),
+      });
+      prefs.setString('userData', userData);
     } catch (error) {
       throw error;
     }
