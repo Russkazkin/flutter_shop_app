@@ -83,6 +83,24 @@ class Auth with ChangeNotifier {
     return _authenticate(email, password, url);
   }
 
+  Future<bool> tryAutoLogin() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (!prefs.containsKey('userData')) {
+      return false;
+    }
+    final extractedUserData = json.decode(prefs.getString('userData')) as Map<String, Object>;
+    final expireDate = DateTime.parse(extractedUserData['expireDate']);
+    if (expireDate.isBefore(DateTime.now())) {
+      return false;
+    }
+    _token = extractedUserData['token'];
+    _userId = extractedUserData['userId'];
+    _expireDate = expireDate;
+    notifyListeners();
+    autoLogout();
+    return true;
+  }
+
   void logout() {
     _token = null;
     _userId = null;

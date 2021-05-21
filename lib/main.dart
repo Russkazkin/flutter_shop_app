@@ -13,6 +13,7 @@ import 'screens/orders.dart' as OrdersScreen;
 import 'screens/user_products.dart';
 import 'screens/edit_product_screen.dart';
 import 'screens/auth_screen.dart';
+import 'screens/splash_screen.dart';
 
 Future main() async {
   await DotEnv.load();
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
           create: (context) => Auth(),
         ),
         ChangeNotifierProxyProvider<Auth, Products>(
-          create: null,
+          create: (_) => Products('', '', []),
           update: (context, auth, previousProducts) => Products(
             auth.token,
             auth.userId,
@@ -55,7 +56,16 @@ class MyApp extends StatelessWidget {
             accentColor: Colors.deepOrange,
             fontFamily: 'Lato',
           ),
-          home: auth.isAuth ? ProductsOverview() : AuthScreen(),
+          home: auth.isAuth
+              ? ProductsOverview()
+              : FutureBuilder(
+                  future: auth.tryAutoLogin(),
+                  builder: (builderContext, authResultSnapshot) =>
+                      authResultSnapshot.connectionState ==
+                              ConnectionState.waiting
+                          ? SplashScreen()
+                          : AuthScreen(),
+                ),
           routes: {
             ProductDetail.route: (context) => ProductDetail(),
             CartScreen.Cart.route: (context) => CartScreen.Cart(),
