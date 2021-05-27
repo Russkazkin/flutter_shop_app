@@ -23,8 +23,11 @@ class ProductItem extends StatelessWidget {
               arguments: product.id,
             );
           },
-          child: Image.network(
-            product.imageUrl,
+          child: FadeInImage(
+            placeholder: AssetImage(
+              'assets/images/product-placeholder.png',
+            ),
+            image: NetworkImage(product.imageUrl),
             fit: BoxFit.cover,
           ),
         ),
@@ -43,7 +46,8 @@ class ProductItem extends StatelessWidget {
                   product.isFavorite ? Icons.favorite : Icons.favorite_border),
               onPressed: () async {
                 try {
-                  await product.toggleFavoriteStatus(authData.token, authData.userId);
+                  await product.toggleFavoriteStatus(
+                      authData.token, authData.userId);
                 } catch (error) {
                   print(error.toString());
                   scaffold.showSnackBar(
@@ -71,9 +75,15 @@ class ProductItem extends StatelessWidget {
               cart.addItem(product.id, product.price, product.title);
               Scaffold.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('Added item to cart!', textAlign: TextAlign.center,),
+                  content: Text(
+                    'Added item to cart!',
+                    textAlign: TextAlign.center,
+                  ),
                   duration: Duration(seconds: 2),
-                  action: SnackBarAction(label: 'UNDO', onPressed: () => cart.removeSingleItem(product.id),),
+                  action: SnackBarAction(
+                    label: 'UNDO',
+                    onPressed: () => cart.removeSingleItem(product.id),
+                  ),
                 ),
               );
             },
