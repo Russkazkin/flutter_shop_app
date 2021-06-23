@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../providers/auth.dart';
 import '../screens/orders.dart';
 import '../screens/user_products.dart';
+import '../helpers/custom_route.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
@@ -28,6 +29,11 @@ class AppDrawer extends StatelessWidget {
             title: Text('Orders'),
             onTap: () {
               Navigator.of(context).pushReplacementNamed(Orders.route);
+              // Navigator.of(context).pushReplacement(
+              //   CustomRoute(
+              //     builder: (builderContext) => Orders(),
+              //   ),
+              // );
             },
           ),
           ListTile(
